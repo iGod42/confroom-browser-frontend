@@ -16,10 +16,10 @@ const LinkButton = styled.button`
 	border-style: solid;
 	border-color:white;
 	border-width:2px;
-	margin-bottom: 1em;
-	width:8em;
+	margin: 0 1em 1em 0;
+	min-width: 8em;
+	flex: 1;
 `
-
 const Room = ({room, onSelect}: RoomParams) => <LinkButton onClick={onSelect}>{room.displayName}</LinkButton>
 
 export default Room

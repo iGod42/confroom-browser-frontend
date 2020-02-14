@@ -5,10 +5,10 @@ import Rooms from "./components/Rooms"
 import styled from "styled-components"
 
 const RoomSelectionWrapper = styled.div`
-	margin: 0 1em;
+	margin-left: 1em;
 	display: flex;
 	flex-direction: column;
-	align: center;
+	align-items: center;
 `
 
 const RoomSelection = () => {
@@ -17,25 +17,25 @@ const RoomSelection = () => {
 	const [rooms, setRooms] = useState<Array<RoomType>>([])
 	const history = useHistory()
 	
-	async function fetchRooms() {
-		setLoading(true)
-		setError(undefined)
-		try {
-			setRooms(await roomApi.getRooms())
-		} catch (e) {
-			setRooms([])
-			setError("Could not reach hub, will retry automatically")
-			setTimeout(fetchRooms, 10000)
-		} finally {
-			setLoading(false)
-		}
-	}
-	
 	function selectRoom(roomId: string) {
 		history.push(`/status/${roomId}`)
 	}
 	
 	useEffect(() => {
+		async function fetchRooms() {
+			setLoading(true)
+			setError(undefined)
+			try {
+				setRooms(await roomApi.getRooms())
+			} catch (e) {
+				setRooms([])
+				setError("Could not reach hub, will retry automatically")
+				setTimeout(fetchRooms, 10000)
+			} finally {
+				setLoading(false)
+			}
+		}
+		
 		fetchRooms()
 			.then(() => {
 			})

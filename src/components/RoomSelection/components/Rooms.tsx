@@ -11,10 +11,9 @@ type RoomsParams = {
 const RoomWrapper = styled.div`
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: left;
 	align-content: space-around;
 `
-
 const Rooms = ({rooms, onSelectRoom}: RoomsParams) => {
 	return <RoomWrapper>{rooms.sort((a, b) => a.displayName.localeCompare(b.displayName)).map(room => <Room
 		key={room.id} room={room}
