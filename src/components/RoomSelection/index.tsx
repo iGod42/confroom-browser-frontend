@@ -22,6 +22,8 @@ const RoomSelection = () => {
 	}
 	
 	useEffect(() => {
+		let theTimeout: number
+		
 		async function fetchRooms() {
 			setLoading(true)
 			setError(undefined)
@@ -30,7 +32,7 @@ const RoomSelection = () => {
 			} catch (e) {
 				setRooms([])
 				setError("Could not reach hub, will retry automatically")
-				setTimeout(fetchRooms, 10000)
+				theTimeout = setTimeout(fetchRooms, 10000)
 			} finally {
 				setLoading(false)
 			}
@@ -39,6 +41,7 @@ const RoomSelection = () => {
 		fetchRooms()
 			.then(() => {
 			})
+		return () => clearTimeout(theTimeout)
 	}, [])
 	
 	return loading ? <div>loading</div> :
