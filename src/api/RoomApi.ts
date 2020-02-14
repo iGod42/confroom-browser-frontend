@@ -10,6 +10,11 @@ function getRooms(): Promise<RoomType[]> {
 		.then(res => res.json())
 }
 
+function getRoom(roomId: string): Promise<RoomType> {
+	return fetch(new URL("rooms/" + roomId, config.hubUrl).toString())
+		.then(res => res.json())
+}
+
 export type EventType = {
 	id: string,
 	subject: string,
@@ -47,4 +52,4 @@ function convertEvent(event: ApiEventType): EventType {
 	}
 }
 
-export default {getRooms, getEvents}
+export default {getRoom, getRooms, getEvents}
