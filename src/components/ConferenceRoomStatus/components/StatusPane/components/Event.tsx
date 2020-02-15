@@ -19,28 +19,16 @@ const Wrapper = styled(Box)(({theme, active}: { theme: Theme, active: number }) 
 	color: active ? theme.palette.error.main : "inherit"
 }))
 
-const TimeWrapper = styled("div")({
-	flexShrink: 0
-})
-
-const EventTitle = styled(Typography)(({theme}) => ({
-	marginLeft: theme.spacing(2)
-}))
-
-const EventDivider = styled(Divider)(({theme}) => ({
-	margin: theme.spacing(1, 0)
-}))
-
 const Event = ({event, bottomDivider, isCurrent}: EventProps) => (
 	<Box>
 		<Wrapper active={isCurrent ? 1 : 0}>
-			<TimeWrapper>
+			<Box flexShrink={0}>
 				<Typography variant="subtitle2">{moment(event.start).format("HH:mm")}</Typography>
 				<Typography variant="caption">{EventTools.getFormattedDuration(event)}</Typography>
-			</TimeWrapper>
-			<EventTitle variant="body1">{event.subject}</EventTitle>
+			</Box>
+			<Box ml={2}><Typography variant="body1">{event.subject}</Typography></Box>
 		</Wrapper>
-		{bottomDivider ? <EventDivider/> : null}
+		{bottomDivider ? <Box mt={1} mb={1}><Divider/></Box> : null}
 	</Box>
 )
 
