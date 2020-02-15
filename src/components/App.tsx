@@ -9,11 +9,9 @@ import RoomSelection from "./RoomSelection"
 import ConferenceRoomStatus from "./ConferenceRoomStatus"
 
 const Wrapper = styled.div`
-	background: #233246;
-	width:100%;
-	height:100%;
+	width:100vw;
+	height:100vh;
 	position:absolute;
-	color: white;
 `
 
 const App = () => {

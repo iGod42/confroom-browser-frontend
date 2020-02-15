@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
-import RoomApi, {EventType} from "../../api/RoomApi"
 import styled from "styled-components"
-import CurrentStatusInfo from "./components/CurrentStatusInfo"
-import UpcomingEvents from "./components/UpcomingEvents"
-import useWindowDimensions from "./tools/useWindowDimensions"
 
-const StatusWrapper = styled.div<{ isPortrait: boolean }>`
-	display: flex;
-	flex-direction: ${props => props.isPortrait ? "column" : "row"};
-	flex-wrap: wrap;
-	align-items: stretch;
-	height:100%;
+import RoomApi, {EventType} from "../../api/RoomApi"
+import aurora from "./assets/aurora1024.jpg"
+import StatusPane from "./components/StatusPane"
+
+const StatusWrapper = styled.div`
+	background-image: url(${aurora});
+	background-repeat: no-repeat;
+	height: 100vh;
+	width: 100vw;
+	background-position: center;
+	background-size: cover;
+	display:flex;
+	flex-direction: column;
 `
 
 const ConferenceRoomStatus = () => {
@@ -19,8 +22,7 @@ const ConferenceRoomStatus = () => {
 	const [loading, setLoading] = useState<boolean>(false)
 	const [events, setEvents] = useState<EventType[]>([])
 	const [error, setError] = useState<string>()
-	const [roomName, setRoomName] = useState<string>("Raum")
-	const windowDimensions = useWindowDimensions()
+	/*const [roomName, setRoomName] = useState<string>("Raum")*/
 	
 	const [currentTime, setCurrentTime] = useState<Date>(new Date())
 	
@@ -57,7 +59,7 @@ const ConferenceRoomStatus = () => {
 	})
 	
 	//Loads the room name, once
-	useEffect(() => {
+	/*useEffect(() => {
 		let theTimeout: number
 		
 		async function fetchRoomInfo() {
@@ -74,23 +76,13 @@ const ConferenceRoomStatus = () => {
 		})
 		
 		return () => clearTimeout(theTimeout)
-	}, [roomId])
+	}, [roomId])*/
 	
 	return (!events.length && loading) ? <div>loading...</div> :
 		(!events.length && error) ? <div>{error}</div> :
-			<StatusWrapper isPortrait={windowDimensions.width < windowDimensions.height}>
-				<CurrentStatusInfo roomName={roomName} currentTime={currentTime} events={events}/>
-				<UpcomingEvents events={events} currentTime={currentTime}/>
+			<StatusWrapper>
+				<StatusPane currentTime={currentTime} events={events}/>
 			</StatusWrapper>
 }
 
-/*
-* 	<RoomInfo roomName={roomName}/>
-				<div>{currentTime.toLocaleString()}</div>
-				<br/>
-				<div>Next Event: {JSON.stringify(nextEvent)}</div>
-				<div>Free until: {nextEvent ? moment(nextEvent.start).format("HH:mm") : "tomorrow"}</div>
-				<div>{events.length} Events</div>
-* */
-
-export default ConferenceRoomStatus
+export default React.memo(ConferenceRoomStatus)
