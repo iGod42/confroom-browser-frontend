@@ -23,7 +23,7 @@ const Wrapper = styled(Box)<{ active: number }>`
 	color: ${({theme, active}) => active ? theme.palette.error.main : "inherit"};
 `
 
-const TimeWrapper = styled(Box)`
+const TimeWrapper = styled.div`
 	flex-shrink: 0;
 `
 

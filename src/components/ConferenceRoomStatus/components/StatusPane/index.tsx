@@ -22,8 +22,9 @@ const ContentBox = styled(Box)`
 `
 
 const Wrapper = styled(Box)<{ spacing: number }>`
-	padding: ${({theme, spacing}) => theme.spacing(2 * spacing, spacing, spacing, spacing)};
+	padding: ${({theme, spacing}) => theme.spacing(10, spacing)};
 	display: flex;
+	flex:1;
 `
 
 type StatusPaneProps = {
@@ -42,7 +43,7 @@ const StatusPane = ({currentTime, events, spacing}: StatusPaneProps) => {
 				<StatusHeader currentEvent={currentEvent} nextEvent={nextEvent} currentTime={currentTime}
 							  spacing={spacing}/>
 				<ContentBox p={spacing + 1} pt={spacing}>
-					<EventList events={events} currentTime={currentTime}/>
+					<EventList events={events} currentTime={currentTime} shownEvents={4}/>
 				</ContentBox>
 			</BackgroundPaper>
 		</Wrapper>)
