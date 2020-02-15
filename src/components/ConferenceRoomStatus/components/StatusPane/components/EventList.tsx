@@ -28,7 +28,7 @@ const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventLi
 	return (
 		<Wrapper>
 			{
-				!eventsToShow.length ? <Typography variant="h6" align="center">No more events today</Typography> :
+				!eventsToShow.length ? <Typography variant="overline" align="center">No more events today</Typography> :
 					eventsToShow.map((evt, index, all) =>
 						<Event key={evt.id} event={evt} isCurrent={EventTools.isCurrentEvent(currentTime)(evt)}
 							   bottomDivider={index !== (all.length - 1)}/>)}

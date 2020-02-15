@@ -22,9 +22,8 @@ const ContentBox = styled(Box)`
 `
 
 const Wrapper = styled(Box)<{ spacing: number }>`
-	padding: ${({theme, spacing}) => theme.spacing(10, spacing)};
+	padding: ${({theme, spacing}) => theme.spacing(spacing, spacing, 0, spacing)};
 	display: flex;
-	flex:1;
 `
 
 type StatusPaneProps = {
