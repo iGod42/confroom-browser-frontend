@@ -18,7 +18,7 @@ const Wrapper = styled(Box)`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: stretch;
 `
 
 const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventListProps) => {
@@ -28,7 +28,7 @@ const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventLi
 	return (
 		<Wrapper>
 			{
-				!eventsToShow.length ? <Typography variant="h6">No more events today</Typography> :
+				!eventsToShow.length ? <Typography variant="h6" align="center">No more events today</Typography> :
 					eventsToShow.map((evt, index, all) =>
 						<Event key={evt.id} event={evt} isCurrent={EventTools.isCurrentEvent(currentTime)(evt)}
 							   bottomDivider={index !== (all.length - 1)}/>)}
