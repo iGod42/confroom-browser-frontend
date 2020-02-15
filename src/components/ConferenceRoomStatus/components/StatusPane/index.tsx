@@ -8,7 +8,7 @@ import * as EventTools from "../../tools/EventTools"
 import {EventType} from "../../../../api/RoomApi"
 import StatusHeader from "./components/StatusHeader"
 
-const BackgroundPaper = styled(Paper)<{ spacing: number }>`
+const BackgroundPaper = styled(Paper)`
  	display: flex;
  	flex: 1;
  	flex-direction: column;
@@ -38,7 +38,7 @@ const StatusPane = ({currentTime, events, spacing}: StatusPaneProps) => {
 	
 	return (
 		<Wrapper spacing={spacing}>
-			<BackgroundPaper elevation={3} spacing={spacing}>
+			<BackgroundPaper elevation={3}>
 				<StatusHeader currentEvent={currentEvent} nextEvent={nextEvent} currentTime={currentTime}
 							  spacing={spacing}/>
 				<ContentBox p={spacing + 1} pt={spacing}>
