@@ -1,5 +1,4 @@
 import React from "react"
-import styled from "styled-components"
 import Box from "@material-ui/core/Box"
 import Typography from "@material-ui/core/Typography"
 
@@ -14,25 +13,18 @@ type EventListProps = {
 	showCurrentEvent: boolean
 }
 
-const Wrapper = styled(Box)`
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-`
-
 const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventListProps) => {
 	const eventsToShow = EventTools
 		.getFutureEvents(currentTime, events, {includeCurrent: showCurrentEvent})
 		.slice(0, shownEvents)
 	return (
-		<Wrapper>
+		<Box>
 			{
 				!eventsToShow.length ? <Typography variant="overline" align="center">No more events today</Typography> :
 					eventsToShow.map((evt, index, all) =>
 						<Event key={evt.id} event={evt} isCurrent={EventTools.isCurrentEvent(currentTime)(evt)}
 							   bottomDivider={index !== (all.length - 1)}/>)}
-		</Wrapper>
+		</Box>
 	)
 }
 

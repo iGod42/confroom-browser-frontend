@@ -1,5 +1,5 @@
 import React from "react"
-import styled from "styled-components"
+import {styled} from "@material-ui/core/styles"
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -8,11 +8,11 @@ import {
 import RoomSelection from "./RoomSelection"
 import ConferenceRoomStatus from "./ConferenceRoomStatus"
 
-const Wrapper = styled.div`
-	width:100vw;
-	height:100vh;
-	position:absolute;
-`
+const Wrapper = styled("div")({
+	width: "100vw",
+	height: "100vh",
+	position: "absolute"
+})
 
 const App = () => {
 	return (

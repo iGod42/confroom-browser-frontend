@@ -1,6 +1,6 @@
 import React from "react"
 import moment from "moment"
-import styled from "styled-components"
+import {styled, Theme} from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import {Box} from "@material-ui/core"
 import Divider from "@material-ui/core/Divider"
@@ -14,30 +14,25 @@ type EventProps = {
 	isCurrent: boolean
 }
 
-const EventBox = styled(Box)`
-	display: flex;
-	flex-direction: column;
-`
-const Wrapper = styled(Box)<{ active: number }>`
-	display: flex;
-	color: ${({theme, active}) => active ? theme.palette.error.main : "inherit"};
-`
+const Wrapper = styled(Box)(({theme, active}: { theme: Theme, active: number }) => ({
+	display: "flex",
+	color: active ? theme.palette.error.main : "inherit"
+}))
 
-const TimeWrapper = styled.div`
-	flex-shrink: 0;
-`
+const TimeWrapper = styled("div")({
+	flexShrink: 0
+})
 
-const EventTitle = styled(Typography)`
-	max-height:100%;
-	margin-left: ${({theme}) => theme.spacing(2)}px
-`
+const EventTitle = styled(Typography)(({theme}) => ({
+	marginLeft: theme.spacing(2)
+}))
 
-const EventDivider = styled(Divider)`
-	margin: ${({theme}) => theme.spacing(1, 0)}
-`
+const EventDivider = styled(Divider)(({theme}) => ({
+	margin: theme.spacing(1, 0)
+}))
 
 const Event = ({event, bottomDivider, isCurrent}: EventProps) => (
-	<EventBox>
+	<Box>
 		<Wrapper active={isCurrent ? 1 : 0}>
 			<TimeWrapper>
 				<Typography variant="subtitle2">{moment(event.start).format("HH:mm")}</Typography>
@@ -46,7 +41,7 @@ const Event = ({event, bottomDivider, isCurrent}: EventProps) => (
 			<EventTitle variant="body1">{event.subject}</EventTitle>
 		</Wrapper>
 		{bottomDivider ? <EventDivider/> : null}
-	</EventBox>
+	</Box>
 )
 
 export default React.memo(Event)

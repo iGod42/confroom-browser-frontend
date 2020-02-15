@@ -1,25 +1,16 @@
 import React from "react"
 import {RoomType} from "../../../api/RoomApi"
-import styled from "styled-components"
+import Button from "@material-ui/core/Button"
+import Box from "@material-ui/core/Box"
 
 type RoomParams = {
 	room: RoomType,
 	onSelect: () => void
 }
 
-const LinkButton = styled.button`
-	padding: 1em;
-	font-size: medium;
-	background: transparent;
-	color: white;
-	font-weight: bold;
-	border-style: solid;
-	border-color:white;
-	border-width:2px;
-	margin: 0 1em 1em 0;
-	min-width: 8em;
-	flex: 1;
-`
-const Room = ({room, onSelect}: RoomParams) => <LinkButton onClick={onSelect}>{room.displayName}</LinkButton>
+const Room = ({room, onSelect}: RoomParams) =>
+	<Box m={1}>
+		<Button onClick={onSelect} variant="contained" color="secondary" size="large">{room.displayName}</Button>
+	</Box>
 
 export default Room

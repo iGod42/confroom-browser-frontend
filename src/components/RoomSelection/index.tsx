@@ -1,15 +1,9 @@
 import React, {useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
+import Box from "@material-ui/core/Box"
+import Typography from "@material-ui/core/Typography"
 import roomApi, {RoomType} from "../../api/RoomApi"
 import Rooms from "./components/Rooms"
-import styled from "styled-components"
-
-const RoomSelectionWrapper = styled.div`
-	margin-left: 1em;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`
 
 const RoomSelection = () => {
 	const [loading, setLoading] = useState<boolean>(false)
@@ -32,7 +26,7 @@ const RoomSelection = () => {
 			} catch (e) {
 				setRooms([])
 				setError("Could not reach hub, will retry automatically")
-				theTimeout = setTimeout(fetchRooms, 10000)
+				theTimeout = window.setTimeout(fetchRooms, 10000)
 			} finally {
 				setLoading(false)
 			}
@@ -44,12 +38,14 @@ const RoomSelection = () => {
 		return () => clearTimeout(theTimeout)
 	}, [])
 	
-	return loading ? <div>loading</div> :
-		error ? <div>{error}</div> :
-			(<RoomSelectionWrapper>
-				<h3>Please select the room</h3>
-				<Rooms rooms={rooms} onSelectRoom={selectRoom}/>
-			</RoomSelectionWrapper>)
+	return loading ? <Box m={3}><Typography variant="overline">loading...</Typography></Box> :
+		error ? <Box m={3}><Typography color="error" variant="subtitle2">{error}</Typography></Box> :
+			(
+				<Box>
+					<Box m={3}><Typography variant="h6" align="center">Please select the room</Typography></Box>
+					<Rooms rooms={rooms} onSelectRoom={selectRoom}/>
+				</Box>
+			)
 }
 
 export default RoomSelection
