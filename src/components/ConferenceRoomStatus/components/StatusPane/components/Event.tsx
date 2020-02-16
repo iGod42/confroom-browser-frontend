@@ -30,7 +30,7 @@ const Event = ({event, bottomDivider, isCurrent, appear, disappear}: EventProps)
 			setCollapsed(false)
 		else if (disappear)
 			setCollapsed(true)
-	})
+	}, [appear, disappear])
 	
 	return (<Collapse in={!collapsed}>
 			{

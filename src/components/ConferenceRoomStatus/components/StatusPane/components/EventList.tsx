@@ -61,7 +61,8 @@ const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventLi
 		}
 		
 		setDisplayEvents(newDisplayEvents)
-	}, [events, currentTime])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [events, currentTime, shownEvents, showCurrentEvent])
 	
 	return (
 		<Box>
