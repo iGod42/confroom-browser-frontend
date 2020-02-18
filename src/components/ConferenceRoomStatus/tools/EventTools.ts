@@ -15,7 +15,7 @@ export function isCurrentEvent(currentTime: Date, event: EventType) {
 export function getFutureEvents(currentTime: Date, events: EventType[], options?: ({ includeCurrent?: boolean })): EventType[] {
 	return events.filter(evt => (
 		options && options.includeCurrent ?
-			isCurrentEvent(currentTime, evt) :
+			(evt.start >= currentTime || evt.end > currentTime) :
 			(evt.start > currentTime)))
 		.sort(sortNewFirst)
 }
