@@ -5,18 +5,18 @@ function sortNewFirst(a: EventType, b: EventType): number {
 }
 
 export function getCurrentEvent(currentTime: Date, events: EventType[]) {
-	return events.find(isCurrentEvent(currentTime))
+	return events.find((event: EventType) => isCurrentEvent(currentTime, event))
 }
 
-export function isCurrentEvent(currentTime: Date) {
-	return (event: EventType) => event.start < currentTime && event.end >= currentTime
+export function isCurrentEvent(currentTime: Date, event: EventType) {
+	return event.start < currentTime && event.end >= currentTime
 }
 
 export function getFutureEvents(currentTime: Date, events: EventType[], options?: ({ includeCurrent?: boolean })): EventType[] {
-	return events.filter(evt =>
+	return events.filter(evt => (
 		options && options.includeCurrent ?
-			(evt.start >= currentTime || evt.end > currentTime) :
-			(evt.start > currentTime))
+			isCurrentEvent(currentTime, evt) :
+			(evt.start > currentTime)))
 		.sort(sortNewFirst)
 }
 

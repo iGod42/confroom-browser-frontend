@@ -24,7 +24,7 @@ const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventLi
 					evtToDisplay
 						.map((de, index, all) =>
 							<Event key={de?.id || "listEmptyItem"} event={de}
-								   isCurrent={!!de && EventTools.isCurrentEvent(currentTime)(de)}
+								   isCurrent={!!de && EventTools.isCurrentEvent(currentTime, de)}
 								   bottomDivider={index !== (all.length - 1)}
 							/>
 						) :
