@@ -56,8 +56,9 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			setLoading(true)
 			setError("")
 			try {
-				const events = await RoomApi.getEvents(roomId)
-				setEvents(events.sort((a, b) => a.start.getTime() - b.start.getTime()))
+				const loadedEvents = await RoomApi.getEvents(roomId)
+				
+				setEvents(loadedEvents.sort((a, b) => a.start.getTime() - b.start.getTime()))
 			} catch (e) {
 				setError("Error loading, will retry automatically")
 			} finally {
@@ -79,7 +80,6 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	
 	useEffect(() => {
 		const socket = io(`${socketUrl}?roomId=${roomId}`)
-		
 		socket.on("update", (updates: EventUpdate[]) => {
 			const newEvents = events
 				.filter(evt => !updates.find(change => change.id === evt.id)) // fitler updated ones
@@ -94,8 +94,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		return () => {
 			socket.disconnect()
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socketUrl, roomId])
+	}, [events, socketUrl, roomId])
 	
 	return (!events.length && loading) ? <div>loading...</div> :
 		(!events.length && error) ? <div>{error}</div> :
