@@ -14,13 +14,17 @@ const Wrapper = styled("div")({
 	position: "absolute"
 })
 
-const App = () => {
+type AppProps = {
+	socketUrl: string
+}
+
+const App = ({socketUrl}: AppProps) => {
 	return (
 		<Wrapper>
 			<Router>
 				<Switch>
 					<Route path="/status/:roomId">
-						<ConferenceRoomStatus/>
+						<ConferenceRoomStatus socketUrl={socketUrl}/>
 					</Route>
 					<Route path="*">
 						<RoomSelection/>
