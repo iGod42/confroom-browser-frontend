@@ -9,7 +9,7 @@ import * as serviceWorker from "./serviceWorker"
 import theme from "./assets/Theme"
 import App from "./components/App"
 
-ReactDOM.render(<ThemeProvider theme={theme}>
+ReactDOM.render(<ThemeProvider theme={theme(config.darkMode)}>
 	<CssBaseline/>
 	<App socketUrl={config.hubUrl}/>
 </ThemeProvider>, document.getElementById("root"))
