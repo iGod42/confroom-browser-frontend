@@ -5,20 +5,22 @@ import {styled} from "@material-ui/core/styles"
 import io from "socket.io-client"
 
 import RoomApi, {EventType} from "../../api/RoomApi"
-import aurora from "./assets/aurora1024.jpg"
 import StatusPane from "./components/StatusPane"
 import Box from "@material-ui/core/Box"
 
-const StatusWrapper = styled(Box)({
-	backgroundImage: `url(${aurora})`,
-	backgroundRepeat: "no-repeat",
-	backgroundPosition: "center",
-	backgroundSize: "cover",
-	height: "100vh",
-	width: "100vw",
-	display: "flex",
-	flexDirection: "column",
-	justifyContent: "center"
+const StatusWrapper = styled(Box)(({theme}) => {
+	return ({
+		backgroundImage: `url(${(theme as any).background})`,
+		backgroundRepeat: "no-repeat",
+		backgroundPosition: "center",
+		backgroundSize: "cover",
+		height: "100vh",
+		width: "100vw",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center"
+	})
+	
 })
 
 type EventUpdate = {
