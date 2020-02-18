@@ -21,6 +21,7 @@ export function getFutureEvents(currentTime: Date, events: EventType[], options?
 }
 
 export function getFormattedDuration(event: EventType): string {
+	if (event.isAllDay) return "all day"
 	const timeDiffInSeconds = (event.end.getTime() - event.start.getTime()) / 1000
 	
 	const hours = Math.floor(timeDiffInSeconds / 3600)

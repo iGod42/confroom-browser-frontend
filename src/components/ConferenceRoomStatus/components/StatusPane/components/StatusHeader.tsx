@@ -35,7 +35,7 @@ const StatusHeader = ({currentEvent, nextEvent, currentTime, spacing}: StatusHea
 	<HeaderPaper elevation={3} booked={currentEvent ? 1 : 0} spacing={spacing}>
 		<Typography variant="h4">{formatTime(currentTime)}</Typography>
 		<Typography variant="body2">{currentEvent ? "Booked" : "Free"} until {
-			currentEvent ? formatTime(currentEvent.end) :
+			currentEvent ? (currentEvent.isAllDay ? "tomorrow" : formatTime(currentEvent.end)) :
 				nextEvent ? formatTime(nextEvent.start) : "tomorrow"}</Typography>
 	</HeaderPaper>
 )
