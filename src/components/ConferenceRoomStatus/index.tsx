@@ -102,16 +102,14 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		}
 	}, [events, socketUrl, roomId])
 	
+	const getCleanedCurrentTime = () => new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(),
+		currentTime.getHours(), currentTime.getMinutes(), 0, 0)
+	
 	const bookRoom = async () => {
 		if (!roomId || apiWorking) return
 		setApiWorking(true)
 		try {
-			const start = new Date(
-				currentTime.getFullYear(),
-				currentTime.getMonth(),
-				currentTime.getDate(),
-				currentTime.getHours(),
-				currentTime.getMinutes())
+			const start = getCleanedCurrentTime()
 			
 			const nextEventStart =
 				EventTools.getFutureEvents(currentTime, events)[0]?.start
@@ -131,13 +129,33 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		}
 	}
 	
+	const stopCurrent = async () => {
+		const currentEvent = EventTools.getCurrentEvent(currentTime, events)
+		if (!currentEvent || !roomId) return
+		
+		setApiWorking(true)
+		
+		const update: EventType = {...currentEvent}
+		update.end = getCleanedCurrentTime()
+		try {
+			const newEvent = await RoomApi.updateBooking(roomId, update)
+			const cleanEvents = events.filter(evt => evt.id !== update.id)
+			setEvents(cleanEvents)
+			setEvents(cleanEvents.concat(newEvent))
+		} finally {
+			setApiWorking(false)
+		}
+	}
+	
 	return <StatusWrapper>
 		{(!events.length && loading) ? <div>loading...</div> :
 			(!events.length && error) ? <ErrorPane message={error}/> :
 				<StatusPane currentTime={currentTime} events={events}/>}
-		{!currentEvent && !apiWorking ?
+		{apiWorking ? null : !currentEvent ?
 			<ActionButton onClick={bookRoom} color="secondary" variant={"extended"} size="large"><i
-				className="material-icons">meeting_room</i>Book 15 min</ActionButton> : null}
+				className="material-icons">meeting_room</i>Book 15 min</ActionButton>
+			: <ActionButton onClick={stopCurrent} color="secondary" variant={"extended"} size="large"><i
+				className="material-icons">check</i>Meeting Done</ActionButton>}
 	</StatusWrapper>
 }
 

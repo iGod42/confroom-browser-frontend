@@ -58,6 +58,20 @@ export async function bookRoom(roomId: string, from: Date, to: Date): Promise<Ev
 		.then(convertEvent)
 }
 
+export async function updateBooking(roomId: string, event: EventType) {
+	const url = new URL(`rooms/${roomId}/events/${event.id}`, config.hubUrl)
+	
+	return fetch(url.toString(), {
+		method: "PATCH",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(event)
+	})
+		.then(res => res.json())
+		.then(convertEvent)
+}
+
 /* All day events will be returned with UTC Date set, so we need to account for that here*/
 function convertEvent(event: ApiEventType): EventType {
 	const convertUTCDateToLocalTime = (date: Date): Date =>
