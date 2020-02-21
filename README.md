@@ -27,5 +27,9 @@ Just a plain XServer running a single application, chromium in kiosk mode, to ac
     * Makes sure some default settings for chromium to be displayed correctly on a small display are present.
     * Sets up a user "confroom"
     * Enables autologin / autostart for chromium
+    * Browser will start pointing to {YOU_FRONTEND_URL} you can choose different options
+        * http://your-host will load the room list
+        * http://your-host/roomID will directly load up a specific room
+        * If you want to change this after the script. This will be located in `/home/confroom/startDisplay.sh`
 1. Install whatever display driver you'reusing. (*It's important that this is **not** done before running the install script, as those installers usually modify XServer settings which would not be present before running setup*)
 1. Reboot

@@ -25,14 +25,16 @@ EOF
 chmod u+x /home/$USERNAME/startDisplay.sh
 
 # chrome browser config is necessary because for some reason chrome starts with a margin
+# sets the window to tiny size. Page will render to screen size anyway. This is not ideal, but I haven't found a better way
 cat >/home/$USERNAME/.config/chromium/Default/Preferences <<EOF
 {
     "browser": {
+        "has_seen_welcome_page": true,
         "window_placement": {
-        "bottom": 10000,
+        "bottom": 480,
         "left": 0,
         "maximized": true,
-        "right": 10000,
+        "right": 320,
         "top": 0
         }
     }
@@ -70,3 +72,5 @@ EOF
 sudo cp /etc/skel/.profile /home/$USERNAME/.
 
 sudo chown -R $USERNAME:$USERNAME /home/$USERNAME
+
+echo "All set! Don't forget to set the timezone correctly"
