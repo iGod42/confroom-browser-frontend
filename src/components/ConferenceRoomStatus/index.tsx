@@ -37,7 +37,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	const [loading, setLoading] = useState<boolean>(false)
 	const [events, setEvents] = useState<EventType[]>([])
 	const [error, setError] = useState<string>()
-	
+	const [roomName, setRoomName] = useState<string>("Meeting Room")
 	const [apiWorking, setApiWorking] = useState<boolean>(false)
 	
 	const [currentTime, setCurrentTime] = useState<Date>(new Date())
@@ -102,6 +102,15 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		}
 	}, [events, socketUrl, roomId])
 	
+	useEffect(() => {
+		if (!roomId) return
+		RoomApi.getRoom(roomId)
+			.then(room => {
+				if (room?.displayName)
+					setRoomName(room.displayName)
+			})
+	}, [roomId])
+	
 	const getCleanedCurrentTime = () => new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(),
 		currentTime.getHours(), currentTime.getMinutes(), 0, 0)
 	
@@ -150,12 +159,14 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	return <StatusWrapper>
 		{(!events.length && loading) ? <div>loading...</div> :
 			(!events.length && error) ? <ErrorPane message={error}/> :
-				<StatusPane currentTime={currentTime} events={events}/>}
-		{apiWorking ? null : !currentEvent ?
-			<ActionButton onClick={bookRoom} color="secondary" variant={"extended"} size="large"><i
-				className="material-icons">meeting_room</i>Book 15 min</ActionButton>
-			: <ActionButton onClick={stopCurrent} color="secondary" variant={"extended"} size="large"><i
-				className="material-icons">check</i>Meeting Done</ActionButton>}
+				<React.Fragment>
+					<StatusPane currentTime={currentTime} events={events} roomName={roomName}/>
+					{apiWorking ? null : !currentEvent ?
+						<ActionButton onClick={bookRoom} color="secondary" variant={"extended"} size="large"><i
+							className="material-icons">meeting_room</i>Book 15 min</ActionButton>
+						: <ActionButton onClick={stopCurrent} color="secondary" variant={"extended"} size="large"><i
+							className="material-icons">check</i>Meeting Done</ActionButton>}
+				</React.Fragment>}
 	</StatusWrapper>
 }
 

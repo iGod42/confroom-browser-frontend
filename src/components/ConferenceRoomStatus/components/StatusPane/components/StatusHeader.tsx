@@ -25,16 +25,18 @@ const HeaderPaper = styled(Paper)(({theme, booked, spacing}: { theme: Theme, boo
 type StatusHeaderProps = {
 	spacing: number,
 	currentEvent: EventType | undefined,
-	nextEvent: EventType | undefined
-	currentTime: Date
+	nextEvent: EventType | undefined,
+	currentTime: Date,
+	roomName: string
 }
 
 const formatTime = (date: Date): string => moment(date).format("HH:mm")
 
-const StatusHeader = ({currentEvent, nextEvent, currentTime, spacing}: StatusHeaderProps) => (
+const StatusHeader = ({currentEvent, nextEvent, currentTime, spacing, roomName}: StatusHeaderProps) => (
 	<HeaderPaper elevation={3} booked={currentEvent ? 1 : 0} spacing={spacing}>
+		<Typography variant="subtitle1">{roomName}</Typography>
 		<Typography variant="h4">{formatTime(currentTime)}</Typography>
-		<Typography variant="body2">{currentEvent ? "Booked" : "Free"} until {
+		<Typography variant="subtitle2">{currentEvent ? "Booked" : "Free"} until {
 			currentEvent ? (currentEvent.isAllDay ? "tomorrow" : formatTime(currentEvent.end)) :
 				nextEvent ? formatTime(nextEvent.start) : "tomorrow"}</Typography>
 	</HeaderPaper>

@@ -15,20 +15,21 @@ const BackgroundPaper = styled(Paper)({
 type StatusPaneProps = {
 	currentTime: Date,
 	events: EventType[],
-	spacing: number
+	spacing: number,
+	roomName: string
 }
 
-const StatusPane = ({currentTime, events, spacing}: StatusPaneProps) => {
+const StatusPane = ({currentTime, events, spacing, roomName}: StatusPaneProps) => {
 	const currentEvent = EventTools.getCurrentEvent(currentTime, events)
 	const nextEvent = EventTools.getFutureEvents(currentTime, events)[0]
 	
 	return (
-		<Box display="flex" paddingTop={spacing} paddingX={spacing}>
+		<Box display="flex" padding={spacing}>
 			<BackgroundPaper elevation={3}>
 				<StatusHeader currentEvent={currentEvent} nextEvent={nextEvent} currentTime={currentTime}
-							  spacing={spacing}/>
+							  spacing={spacing} roomName={roomName}/>
 				<Box p={spacing + 1} pt={spacing}>
-					<EventList events={events} currentTime={currentTime} shownEvents={4}/>
+					<EventList events={events} currentTime={currentTime} shownEvents={3}/>
 				</Box>
 			</BackgroundPaper>
 		</Box>)
