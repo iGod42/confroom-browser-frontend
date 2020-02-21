@@ -19,7 +19,9 @@ sudo mkdir -p /home/$USERNAME/.config/chromium/Default
 # startup script for chrome
 cat >/home/$USERNAME/startDisplay.sh <<EOF
 #!/bin/bash
-chromium-browser --kiosk --start-maximized --disable-restore-background-contents --disable-translate --disable-new-tab-first-run $1
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+chromium-browser --kiosk --no-default-browser-check --no-first-run --start-maximized --disable-restore-background-contents --disable-translate --disable-session-crashed-bubble --disable-new-tab-first-run $1
 EOF
 
 chmod u+x /home/$USERNAME/startDisplay.sh
