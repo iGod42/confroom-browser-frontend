@@ -1,28 +1,16 @@
 import React, {useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
 import {styled} from "@material-ui/core/styles"
+import Fab from "@material-ui/core/Fab"
 
 import io from "socket.io-client"
 
-import RoomApi, {EventType} from "../../api/RoomApi"
+import {EventType, getEvents} from "../../api/RoomApi"
 import StatusPane from "./components/StatusPane"
-import Box from "@material-ui/core/Box"
 import ErrorPane from "./components/ErrorPane"
-
-const StatusWrapper = styled(Box)(({theme}) => {
-	return ({
-		backgroundImage: `url(${(theme as any).background})`,
-		backgroundRepeat: "no-repeat",
-		backgroundPosition: "center",
-		backgroundSize: "cover",
-		height: "100vh",
-		width: "100vw",
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center"
-	})
-	
-})
+import StatusWrapper from "./components/StatusWrapper"
+import * as RoomApi from "../../api/RoomApi"
+import * as EventTools from "./tools/EventTools"
 
 type EventUpdate = {
 	type: "addedOrUpdated" | "removed",
@@ -38,15 +26,25 @@ const mapSocksEvtType = (evt: any): EventType => {
 	}
 }
 
+const ActionButton = styled(Fab)(({theme}) => ({
+	position: "fixed",
+	bottom: theme.spacing(2),
+	right: theme.spacing(2)
+}))
+
 const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	
 	const [loading, setLoading] = useState<boolean>(false)
 	const [events, setEvents] = useState<EventType[]>([])
 	const [error, setError] = useState<string>()
 	
+	const [apiWorking, setApiWorking] = useState<boolean>(false)
+	
 	const [currentTime, setCurrentTime] = useState<Date>(new Date())
 	
 	const {roomId} = useParams()
+	
+	const currentEvent = EventTools.getCurrentEvent(currentTime, events)
 	
 	// fetches the events periodically
 	useEffect(() => {
@@ -57,7 +55,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			setLoading(true)
 			setError("")
 			try {
-				const loadedEvents = await RoomApi.getEvents(roomId)
+				const loadedEvents = await getEvents(roomId)
 				
 				setEvents(loadedEvents.sort((a, b) => a.start.getTime() - b.start.getTime()))
 			} catch (e) {
@@ -104,10 +102,42 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		}
 	}, [events, socketUrl, roomId])
 	
+	const bookRoom = async () => {
+		if (!roomId || apiWorking) return
+		setApiWorking(true)
+		try {
+			const start = new Date(
+				currentTime.getFullYear(),
+				currentTime.getMonth(),
+				currentTime.getDate(),
+				currentTime.getHours(),
+				currentTime.getMinutes())
+			
+			const nextEventStart =
+				EventTools.getFutureEvents(currentTime, events)[0]?.start
+				|| new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1)
+			
+			let end = new Date(start)
+			end.setMinutes(end.getMinutes() + 15)
+			
+			end = nextEventStart < end ? nextEventStart : end
+			
+			const newEvent = await RoomApi.bookRoom(roomId, start, end)
+			
+			setEvents(events.concat(newEvent))
+			
+		} finally {
+			setApiWorking(false)
+		}
+	}
+	
 	return <StatusWrapper>
 		{(!events.length && loading) ? <div>loading...</div> :
 			(!events.length && error) ? <ErrorPane message={error}/> :
 				<StatusPane currentTime={currentTime} events={events}/>}
+		{!currentEvent && !apiWorking ?
+			<ActionButton onClick={bookRoom} color="secondary" variant={"extended"} size="large"><i
+				className="material-icons">meeting_room</i>Book 15 min</ActionButton> : null}
 	</StatusWrapper>
 }
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
 import Box from "@material-ui/core/Box"
 import Typography from "@material-ui/core/Typography"
-import roomApi, {RoomType} from "../../api/RoomApi"
+import {RoomType, getRooms} from "../../api/RoomApi"
 import Rooms from "./components/Rooms"
 
 const RoomSelection = () => {
@@ -22,7 +22,7 @@ const RoomSelection = () => {
 			setLoading(true)
 			setError(undefined)
 			try {
-				setRooms(await roomApi.getRooms())
+				setRooms(await getRooms())
 			} catch (e) {
 				setRooms([])
 				setError("Could not reach hub, will retry automatically")

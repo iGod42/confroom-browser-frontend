@@ -5,16 +5,6 @@ export type RoomType = {
 	id: string
 }
 
-function getRooms(): Promise<RoomType[]> {
-	return fetch(new URL("rooms", config.hubUrl).toString())
-		.then(res => res.json())
-}
-
-function getRoom(roomId: string): Promise<RoomType> {
-	return fetch(new URL("rooms/" + roomId, config.hubUrl).toString())
-		.then(res => res.json())
-}
-
 export type EventType = {
 	id: string,
 	subject: string,
@@ -31,7 +21,17 @@ type ApiEventType = {
 	isAllDay: boolean
 }
 
-function getEvents(roomId: string, from?: Date, to?: Date): Promise<EventType[]> {
+export function getRooms(): Promise<RoomType[]> {
+	return fetch(new URL("rooms", config.hubUrl).toString())
+		.then(res => res.json())
+}
+
+export function getRoom(roomId: string): Promise<RoomType> {
+	return fetch(new URL("rooms/" + roomId, config.hubUrl).toString())
+		.then(res => res.json())
+}
+
+export function getEvents(roomId: string, from?: Date, to?: Date): Promise<EventType[]> {
 	
 	const today = new Date()
 	from = from || new Date(today.getFullYear(), today.getMonth(), today.getDate())
@@ -44,6 +44,18 @@ function getEvents(roomId: string, from?: Date, to?: Date): Promise<EventType[]>
 	return fetch(url.toString())
 		.then(res => res.json())
 		.then(res => (res as ApiEventType[]).map(convertEvent))
+}
+
+export async function bookRoom(roomId: string, from: Date, to: Date): Promise<EventType> {
+	const url = new URL(`rooms/${roomId}/events`, config.hubUrl)
+	url.searchParams.append("from", from.toISOString())
+	url.searchParams.append("to", to.toISOString())
+	
+	return fetch(url.toString(), {
+		method: "POST"
+	})
+		.then(res => res.json())
+		.then(convertEvent)
 }
 
 /* All day events will be returned with UTC Date set, so we need to account for that here*/
@@ -67,5 +79,3 @@ function convertEvent(event: ApiEventType): EventType {
 	
 	return converted
 }
-
-export default {getRoom, getRooms, getEvents}
