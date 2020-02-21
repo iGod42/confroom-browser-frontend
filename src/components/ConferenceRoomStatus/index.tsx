@@ -7,6 +7,7 @@ import io from "socket.io-client"
 import RoomApi, {EventType} from "../../api/RoomApi"
 import StatusPane from "./components/StatusPane"
 import Box from "@material-ui/core/Box"
+import ErrorPane from "./components/ErrorPane"
 
 const StatusWrapper = styled(Box)(({theme}) => {
 	return ({
@@ -61,9 +62,9 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 				setEvents(loadedEvents.sort((a, b) => a.start.getTime() - b.start.getTime()))
 			} catch (e) {
 				setError("Error loading, will retry automatically")
+				theTimeout = window.setTimeout(loadEvents, 60000)
 			} finally {
 				setLoading(false)
-				//theTimeout = window.setTimeout(loadEvents, 60000)
 			}
 		}
 		
@@ -81,6 +82,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	useEffect(() => {
 		const socket = io(`${socketUrl}?roomId=${roomId}`)
 		socket.on("update", (updates: EventUpdate[]) => {
+			setError("")
 			const newEvents = events
 				.filter(evt => !updates.find(change => change.id === evt.id)) // fitler updated ones
 				.concat(updates
@@ -91,16 +93,22 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			setEvents(newEvents)
 		})
 		
+		socket.on("error", (error: number) => {
+			setError(error === 401 ?
+				"Authentication for the room failed, manual action on the hub is required" :
+				"There seems to be an error updating. Please check the hub")
+		})
+		
 		return () => {
 			socket.disconnect()
 		}
 	}, [events, socketUrl, roomId])
 	
-	return (!events.length && loading) ? <div>loading...</div> :
-		(!events.length && error) ? <div>{error}</div> :
-			<StatusWrapper>
-				<StatusPane currentTime={currentTime} events={events}/>
-			</StatusWrapper>
+	return <StatusWrapper>
+		{(!events.length && loading) ? <div>loading...</div> :
+			(!events.length && error) ? <ErrorPane message={error}/> :
+				<StatusPane currentTime={currentTime} events={events}/>}
+	</StatusWrapper>
 }
 
 export default React.memo(ConferenceRoomStatus)
