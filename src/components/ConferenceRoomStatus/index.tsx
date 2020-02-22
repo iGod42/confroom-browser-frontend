@@ -112,7 +112,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			const start = getCleanedCurrentTime()
 			
 			const nextEventStart =
-				EventTools.getFutureEvents(currentTime, events)[0]?.start
+				EventTools.getTodaysFutureEvents(currentTime, events)[0]?.start
 				|| new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1)
 			
 			let end = new Date(start)

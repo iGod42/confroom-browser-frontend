@@ -12,11 +12,12 @@ export function isCurrentEvent(currentTime: Date, event: EventType) {
 	return event.start < currentTime && event.end >= currentTime
 }
 
-export function getFutureEvents(currentTime: Date, events: EventType[], options?: ({ includeCurrent?: boolean })): EventType[] {
+export function getTodaysFutureEvents(currentTime: Date, events: EventType[], options?: ({ includeCurrent?: boolean })): EventType[] {
 	return events.filter(evt => (
-		options && options.includeCurrent ?
+		options?.includeCurrent ?
 			(evt.start >= currentTime || evt.end > currentTime) :
 			(evt.start > currentTime)))
+		.filter(evt => evt.start < new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1))
 		.sort(sortNewFirst)
 }
 

@@ -21,7 +21,7 @@ type StatusPaneProps = {
 
 const StatusPane = ({currentTime, events, spacing, roomName}: StatusPaneProps) => {
 	const currentEvent = EventTools.getCurrentEvent(currentTime, events)
-	const nextEvent = EventTools.getFutureEvents(currentTime, events)[0]
+	const nextEvent = EventTools.getTodaysFutureEvents(currentTime, events)[0]
 	
 	return (
 		<Box display="flex" padding={spacing}>

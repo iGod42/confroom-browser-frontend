@@ -15,7 +15,7 @@ type EventListProps = {
 
 const EventList = ({currentTime, events, shownEvents, showCurrentEvent}: EventListProps) => {
 	const evtToDisplay = EventTools
-		.getFutureEvents(currentTime, events, {includeCurrent: showCurrentEvent})
+		.getTodaysFutureEvents(currentTime, events, {includeCurrent: showCurrentEvent})
 		.slice(0, shownEvents)
 	return (
 		<Box>
