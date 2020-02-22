@@ -11,6 +11,7 @@ import ErrorPane from "./components/ErrorPane"
 import StatusWrapper from "./components/StatusWrapper"
 import * as RoomApi from "../../api/RoomApi"
 import * as EventTools from "./tools/EventTools"
+import useCurrentTime from "./hooks/useCurrentTime"
 
 type EventUpdate = {
 	type: "addedOrUpdated" | "removed",
@@ -40,7 +41,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	const [roomName, setRoomName] = useState<string>("Meeting Room")
 	const [apiWorking, setApiWorking] = useState<boolean>(false)
 	
-	const [currentTime, setCurrentTime] = useState<Date>(new Date())
+	const currentTime = useCurrentTime()
 	
 	const {roomId} = useParams()
 	
@@ -70,12 +71,6 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 		})
 		return () => clearTimeout(theTimeout)
 	}, [roomId])
-	
-	// takes care that time is updated every second
-	useEffect(() => {
-		const theInterval = setInterval(() => setCurrentTime(new Date()), 1000)
-		return () => clearInterval(theInterval)
-	})
 	
 	useEffect(() => {
 		const socket = io(`${socketUrl}?roomId=${roomId}`)
