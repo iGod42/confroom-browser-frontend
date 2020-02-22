@@ -60,6 +60,10 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 				const loadedEvents = await getEvents(roomId)
 				
 				setEvents(loadedEvents.sort((a, b) => a.start.getTime() - b.start.getTime()))
+				
+				// ensure that we do a full load tomorrow as incremental updates won't cover those coming in
+				const tomorrow = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1)
+				theTimeout = window.setTimeout(loadEvents, tomorrow.getTime() - currentTime.getTime())
 			} catch (e) {
 				setError("Error loading, will retry automatically")
 				theTimeout = window.setTimeout(loadEvents, 60000)
