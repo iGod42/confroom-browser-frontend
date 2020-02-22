@@ -12,6 +12,7 @@ import StatusWrapper from "./components/StatusWrapper"
 import * as RoomApi from "../../api/RoomApi"
 import * as EventTools from "./tools/EventTools"
 import useCurrentTime from "./hooks/useCurrentTime"
+import useRoomName from "./hooks/useRoomName"
 
 type EventUpdate = {
 	type: "addedOrUpdated" | "removed",
@@ -38,12 +39,12 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	const [loading, setLoading] = useState<boolean>(false)
 	const [events, setEvents] = useState<EventType[]>([])
 	const [error, setError] = useState<string>()
-	const [roomName, setRoomName] = useState<string>("Meeting Room")
 	const [apiWorking, setApiWorking] = useState<boolean>(false)
 	
 	const currentTime = useCurrentTime()
 	
 	const {roomId} = useParams()
+	const roomName = useRoomName(roomId)
 	
 	const currentEvent = EventTools.getCurrentEvent(currentTime, events)
 	
@@ -96,15 +97,6 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			socket.disconnect()
 		}
 	}, [events, socketUrl, roomId])
-	
-	useEffect(() => {
-		if (!roomId) return
-		RoomApi.getRoom(roomId)
-			.then(room => {
-				if (room?.displayName)
-					setRoomName(room.displayName)
-			})
-	}, [roomId])
 	
 	const getCleanedCurrentTime = () => new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(),
 		currentTime.getHours(), currentTime.getMinutes(), 0, 0)
