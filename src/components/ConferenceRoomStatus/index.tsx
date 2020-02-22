@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
-import {styled} from "@material-ui/core/styles"
-import Fab from "@material-ui/core/Fab"
 
 import io from "socket.io-client"
 
 import {EventType, getEvents} from "../../api/RoomApi"
 import StatusPane from "./components/StatusPane"
-import ErrorPane from "./components/ErrorPane"
+
+import ActionButton from "./components/ActionButton"
 import StatusWrapper from "./components/StatusWrapper"
 import * as RoomApi from "../../api/RoomApi"
 import * as EventTools from "./tools/EventTools"
 import useCurrentTime from "./hooks/useCurrentTime"
 import useRoomName from "./hooks/useRoomName"
+
+const ErrorPane = React.lazy(() => import("./components/ErrorPane"))
 
 type EventUpdate = {
 	type: "addedOrUpdated" | "removed",
@@ -27,12 +28,6 @@ const mapSocksEvtType = (evt: any): EventType => {
 		end: new Date(evt.end)
 	}
 }
-
-const ActionButton = styled(Fab)(({theme}) => ({
-	position: "fixed",
-	bottom: theme.spacing(2),
-	right: theme.spacing(2)
-}))
 
 const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	
