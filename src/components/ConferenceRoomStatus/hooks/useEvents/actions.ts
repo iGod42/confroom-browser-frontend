@@ -59,3 +59,10 @@ export const eventUpdated = (event: EventType): EventsAction => ({
 		event
 	}
 })
+
+export const finishCurrentMeeting = (currentTime: Date, roomId: string): EventsAction => ({
+	type: EventsActionType.FinishCurrentMeeting,
+	payload: {
+		currentTime, roomId
+	}
+})

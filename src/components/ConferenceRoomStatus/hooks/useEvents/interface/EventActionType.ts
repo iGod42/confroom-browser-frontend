@@ -9,7 +9,8 @@ enum EventsActionType {
 	SetError = "SetError",
 	ReceiveUpdates = "ReceiveUpdates",
 	BookRoom = "BookRoom",
-	EventUpdated = "EventUpdated"
+	EventUpdated = "EventUpdated",
+	FinishCurrentMeeting = "FinishCurrentMeeting"
 }
 
 interface StartLoadAction {
@@ -65,6 +66,14 @@ interface EventUpdated {
 	}
 }
 
+interface FinishCurrentMeeting {
+	type: EventsActionType.FinishCurrentMeeting,
+	payload: {
+		currentTime: Date,
+		roomId: string
+	}
+}
+
 export default EventsActionType
 export type EventsAction =
 	StartLoadAction
@@ -75,3 +84,4 @@ export type EventsAction =
 	| ReceiveUpdatesAction
 	| BookRoom
 	| EventUpdated
+	| FinishCurrentMeeting
