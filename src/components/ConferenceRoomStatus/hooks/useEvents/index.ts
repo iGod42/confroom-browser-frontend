@@ -1,11 +1,10 @@
-import {EventType} from "../../../../api/RoomApi"
-import {useReducer, useState} from "react"
+import {useReducer} from "react"
 import reducer, {init} from "./reducer"
-import EventsState from "./interface/EventsState"
-import EventsAction from "./interface/EventsAction"
+import thunk from "./thunk"
 
 export default (roomId: string) => {
-	const [state, dispatch] = useReducer(reducer(roomId), undefined, init)
+	const [state, dispatch] = useReducer(reducer, undefined, init)
+	const theThunk = thunk(dispatch, reducer)
 	
-	return [state, dispatch]
+	return [state, theThunk]
 }

@@ -1,12 +1,21 @@
 import EventsState from "./interface/EventsState"
-import EventsAction from "./interface/EventsAction"
+import EventsActionType from "./interface/EventActionType"
+import EventsReducer from "./interface/EventsReducer"
 
-const init = (): EventsState => {
+const init = (): EventsState => ({
+	events: [],
+	isLoading: false
+})
 
-}
-
-const reducer = (roomId: string) => (state: EventsState, action: EventsAction): EventsState => {
-	return state
+const reducer: EventsReducer = (state, action) => {
+	switch (action.type) {
+		case EventsActionType.StartLoad:
+			return {...state, isLoading: true}
+		case EventsActionType.StopLoad:
+			return {...state, isLoading: false}
+		default:
+			return state
+	}
 }
 
 export default reducer
