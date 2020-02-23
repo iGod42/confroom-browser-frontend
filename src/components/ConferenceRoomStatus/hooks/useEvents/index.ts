@@ -9,12 +9,10 @@ export default (roomId: string | undefined, currentDay: Date) => {
 	const [state, dispatch] = useReducer(reducer, undefined, init)
 	const theThunk = thunk(dispatch, state, reducer)
 	
-	const initialLoad = () => loadTodaysEvents(roomId, currentDay)
-	
 	useEffect(() => {
-		console.log("loading events")
-		theThunk(initialLoad())
-	}, [])
+		theThunk(loadTodaysEvents(roomId, currentDay))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [roomId])
 	
 	return [state, theThunk]
 }

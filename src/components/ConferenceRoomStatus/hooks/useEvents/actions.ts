@@ -1,4 +1,5 @@
-import EventActionType, {EventsAction} from "./interface/EventActionType"
+import EventActionType from "./interface/EventActionType"
+import EventsActionType, {EventsAction} from "./interface/EventActionType"
 import {EventType} from "../../../../api/RoomApi"
 
 export const startLoad = (): EventsAction => ({
@@ -22,4 +23,15 @@ export const loadTodaysEvents = (roomId: string, currentTime: Date): EventsActio
 		currentTime,
 		roomId
 	}
+})
+
+export const setError = (error: string): EventsAction => ({
+	type: EventsActionType.SetError,
+	payload: {
+		error
+	}
+})
+
+export const clearError = (): EventsAction => ({
+	type: EventsActionType.SetError
 })

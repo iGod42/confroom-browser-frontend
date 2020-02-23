@@ -4,7 +4,8 @@ enum EventsActionType {
 	StartLoad = "StartLoad",
 	StopLoad = "StopLoad",
 	LoadTodaysEvents = "LoadTodaysEvents",
-	SetEvents = "SetEvents"
+	SetEvents = "SetEvents",
+	SetError = "SetError"
 }
 
 interface StartLoadAction {
@@ -30,5 +31,12 @@ interface SetEventsAction {
 	}
 }
 
+interface SetErrorAction {
+	type: EventsActionType.SetError,
+	payload?: {
+		error?: string
+	}
+}
+
 export default EventsActionType
-export type EventsAction = StartLoadAction | StopLoadAction | LoadTodaysEventsAction | SetEventsAction
+export type EventsAction = StartLoadAction | StopLoadAction | LoadTodaysEventsAction | SetEventsAction | SetErrorAction
