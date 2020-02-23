@@ -20,6 +20,13 @@ const reducer: EventsReducer = (state, action) => {
 			return {...state, error: action.payload?.error}
 		case EventsActionType.ReceiveUpdates:
 			return receiveUpdates(state, action)
+		case EventsActionType.EventUpdated:
+			return {
+				...state,
+				events: state.events
+					.filter(evt => evt.id !== action.payload.event.id)
+					.concat(action.payload.event)
+			}
 		default:
 			return state
 	}

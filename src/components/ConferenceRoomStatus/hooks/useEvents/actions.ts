@@ -43,3 +43,19 @@ export const receiveUpdates = (updates: EventUpdate[]): EventsAction => ({
 		updates
 	}
 })
+
+export const bookRoom = (roomId: string, currentTime: Date, desiredDuration: number): EventsAction => ({
+	type: EventsActionType.BookRoom,
+	payload: {
+		roomId,
+		currentTime,
+		desiredDuration
+	}
+})
+
+export const eventUpdated = (event: EventType): EventsAction => ({
+	type: EventsActionType.EventUpdated,
+	payload: {
+		event
+	}
+})
