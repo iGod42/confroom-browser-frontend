@@ -1,24 +1,47 @@
-import {useEffect, useReducer} from "react"
+import {Dispatch, useEffect, useReducer, useRef} from "react"
 import reducer, {init} from "./reducer"
 import thunk from "./thunk"
 import {clearError, loadTodaysEvents, receiveUpdates, setError} from "./actions"
 import io from "socket.io-client"
 import {EventUpdate} from "../../../../../../hub/src/lib/CalendarApi"
+import EventsState from "./interface/EventsState"
+import {EventsAction} from "./interface/EventActionType"
 
-export default (roomId: string | undefined, currentDay: Date, socketUrl: string) => {
+export default (roomId: string | undefined, currentTime: Date, socketUrl: string): [EventsState, Dispatch<EventsAction>] => {
 	if (!roomId) throw new Error("Room ID is not set")
 	
-	const [state, dispatch] = useReducer(reducer, undefined, init)
+	const [state, unsafeDispatch] = useReducer(reducer, undefined, init)
+	const mountedRef = useRef(false)
+	
+	useEffect(() => {
+		mountedRef.current = true
+		return () => {
+			mountedRef.current = false
+		}
+	}, [])
+	
+	const dispatch: Dispatch<EventsAction> = action => {
+		if (mountedRef.current) unsafeDispatch(action)
+	}
+	
 	const theThunk = thunk(dispatch, state, reducer)
 	
 	// initial load
 	useEffect(() => {
-		theThunk(loadTodaysEvents(roomId, currentDay))
+		theThunk(loadTodaysEvents(roomId, currentTime))
+		
+		// ensure that we do a full load tomorrow as incremental updates won't cover those coming in
+		const tomorrow = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate() + 1)
+		const timeout = window.setTimeout(() => loadTodaysEvents(roomId, tomorrow), tomorrow.getTime() - currentTime.getTime())
+		
+		return () => clearTimeout(timeout)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [roomId])
 	
 	// subscribe to socket
 	useEffect(() => {
+		
+		// todo handle disconnect and reconnect
 		const socket = io(`${socketUrl}?roomId=${roomId}`)
 		socket.on("update", (updates: EventUpdate[]) => {
 			dispatch(clearError())
@@ -38,3 +61,5 @@ export default (roomId: string | undefined, currentDay: Date, socketUrl: string)
 	
 	return [state, theThunk]
 }
+
+export * from "./actions"
