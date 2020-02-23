@@ -1,17 +1,5 @@
-import config from "../config.json"
-
-export type RoomType = {
-	displayName: string,
-	id: string
-}
-
-export type EventType = {
-	id: string,
-	subject: string,
-	start: Date,
-	end: Date,
-	isAllDay: boolean
-}
+import config from "../../config.json"
+import {RoomType, EventType} from "./Types"
 
 type ApiEventType = {
 	id: string,
@@ -31,12 +19,7 @@ export function getRoom(roomId: string): Promise<RoomType> {
 		.then(res => res.json())
 }
 
-export function getEvents(roomId: string, from?: Date, to?: Date): Promise<EventType[]> {
-	
-	const today = new Date()
-	from = from || new Date(today.getFullYear(), today.getMonth(), today.getDate())
-	to = to || new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
-	
+export function getEvents(roomId: string, from: Date, to: Date): Promise<EventType[]> {
 	const url = new URL(`rooms/${roomId}/events`, config.hubUrl)
 	url.searchParams.append("from", from.toISOString())
 	url.searchParams.append("to", to.toISOString())

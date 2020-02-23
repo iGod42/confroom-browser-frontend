@@ -3,11 +3,11 @@ import {useParams} from "react-router-dom"
 
 import io from "socket.io-client"
 
-import {EventType, getEvents} from "../../api/RoomApi"
 import StatusPane from "./components/StatusPane"
 
 import ActionButton from "./components/ActionButton"
 import StatusWrapper from "./components/StatusWrapper"
+import {EventType} from "../../api/RoomApi"
 import * as RoomApi from "../../api/RoomApi"
 import * as EventTools from "./tools/EventTools"
 import useCurrentTime from "./hooks/useCurrentTime"
@@ -39,6 +39,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 	const currentTime = useCurrentTime()
 	
 	const {roomId} = useParams()
+	
 	const roomName = useRoomName(roomId)
 	
 	const currentEvent = EventTools.getCurrentEvent(currentTime, events)
@@ -52,7 +53,7 @@ const ConferenceRoomStatus = ({socketUrl}: { socketUrl: string }) => {
 			setLoading(true)
 			setError("")
 			try {
-				const loadedEvents = await getEvents(roomId)
+				const loadedEvents = await RoomApi.getTodaysEvents(roomId, currentTime)
 				
 				setEvents(loadedEvents.sort((a, b) => a.start.getTime() - b.start.getTime()))
 				

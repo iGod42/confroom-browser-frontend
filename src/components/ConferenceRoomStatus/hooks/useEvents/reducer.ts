@@ -13,6 +13,8 @@ const reducer: EventsReducer = (state, action) => {
 			return {...state, isLoading: true}
 		case EventsActionType.StopLoad:
 			return {...state, isLoading: false}
+		case EventsActionType.SetEvents:
+			return {...state, events: action.payload.events}
 		default:
 			return state
 	}
