@@ -1,6 +1,7 @@
 import EventActionType from "./interface/EventActionType"
 import EventsActionType, {EventsAction} from "./interface/EventActionType"
 import {EventType} from "../../../../api/RoomApi"
+import {EventUpdate} from "../../../../../../hub/src/lib/CalendarApi/interface"
 
 export const startLoad = (): EventsAction => ({
 	type: EventActionType.StartLoad
@@ -34,4 +35,11 @@ export const setError = (error: string): EventsAction => ({
 
 export const clearError = (): EventsAction => ({
 	type: EventsActionType.SetError
+})
+
+export const receiveUpdates = (updates: EventUpdate[]): EventsAction => ({
+	type: EventsActionType.ReceiveUpdates,
+	payload: {
+		updates
+	}
 })

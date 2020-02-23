@@ -1,11 +1,13 @@
 import {EventType} from "../../../../../api/RoomApi"
+import {EventUpdate} from "../../../../../../../hub/src/lib/CalendarApi/interface"
 
 enum EventsActionType {
 	StartLoad = "StartLoad",
 	StopLoad = "StopLoad",
 	LoadTodaysEvents = "LoadTodaysEvents",
 	SetEvents = "SetEvents",
-	SetError = "SetError"
+	SetError = "SetError",
+	ReceiveUpdates = "ReceiveUpdates"
 }
 
 interface StartLoadAction {
@@ -38,5 +40,18 @@ interface SetErrorAction {
 	}
 }
 
+interface ReceiveUpdatesAction {
+	type: EventsActionType.ReceiveUpdates,
+	payload: {
+		updates: EventUpdate[]
+	}
+}
+
 export default EventsActionType
-export type EventsAction = StartLoadAction | StopLoadAction | LoadTodaysEventsAction | SetEventsAction | SetErrorAction
+export type EventsAction =
+	StartLoadAction
+	| StopLoadAction
+	| LoadTodaysEventsAction
+	| SetEventsAction
+	| SetErrorAction
+	| ReceiveUpdatesAction
