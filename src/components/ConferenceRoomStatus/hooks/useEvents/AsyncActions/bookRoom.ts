@@ -14,7 +14,7 @@ type BookingDetails = {
 const getCleanedCurrentTime = (currentTime: Date) => new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(),
 	currentTime.getHours(), currentTime.getMinutes(), 0, 0)
 
-export default function (dispatch: Dispatch<EventsAction>, state: EventsState, bookingDetails: BookingDetails) {
+export default function (dispatch: Dispatch<EventsAction>, state: EventsState, bookingDetails: BookingDetails, client_key: string) {
 	dispatch(startLoad())
 	
 	const {currentTime, desiredDuration, roomId} = bookingDetails
@@ -28,7 +28,7 @@ export default function (dispatch: Dispatch<EventsAction>, state: EventsState, b
 	end.setMinutes(end.getMinutes() + desiredDuration)
 	end = nextEventStart < end ? nextEventStart : end
 	
-	RoomApi.bookRoom(roomId, start, end)
+	RoomApi.bookRoom(roomId, start, end, client_key)
 		.then(newEvent => {
 			dispatch(eventUpdated(newEvent))
 		})

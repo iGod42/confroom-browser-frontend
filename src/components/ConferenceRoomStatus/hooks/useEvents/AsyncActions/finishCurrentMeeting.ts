@@ -9,7 +9,7 @@ import {eventUpdated, startLoad, stopLoad} from "../actions"
 const getCleanedCurrentTime = (currentTime: Date) => new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate(),
 	currentTime.getHours(), currentTime.getMinutes(), 0, 0)
 
-export default function (dispatch: Dispatch<EventsAction>, state: EventsState, currentTime: Date, roomId: string) {
+export default function (dispatch: Dispatch<EventsAction>, state: EventsState, currentTime: Date, roomId: string, client_key: string) {
 	const {events} = state
 	
 	dispatch(startLoad())
@@ -19,7 +19,7 @@ export default function (dispatch: Dispatch<EventsAction>, state: EventsState, c
 	
 	const update: EventType = {...currentEvent}
 	update.end = getCleanedCurrentTime(currentTime)
-	RoomApi.updateBooking(roomId, update)
+	RoomApi.updateBooking(roomId, update, client_key)
 		.then(newEvent => {
 			dispatch(eventUpdated(newEvent))
 		})

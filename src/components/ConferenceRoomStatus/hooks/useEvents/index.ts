@@ -6,9 +6,12 @@ import io from "socket.io-client"
 import {EventUpdate} from "../../../../../../hub/src/lib/CalendarApi"
 import EventsState from "./interface/EventsState"
 import {EventsAction} from "./interface/EventActionType"
+import useClientKey from "../../../useClientKey"
 
 export default (roomId: string | undefined, currentTime: Date, socketUrl: string): [EventsState, Dispatch<EventsAction>] => {
 	if (!roomId) throw new Error("Room ID is not set")
+	
+	const clientKey = useClientKey()
 	
 	const [state, unsafeDispatch] = useReducer(reducer, undefined, init)
 	const mountedRef = useRef(false)
@@ -24,7 +27,7 @@ export default (roomId: string | undefined, currentTime: Date, socketUrl: string
 		if (mountedRef.current) unsafeDispatch(action)
 	}
 	
-	const theThunk = thunk(dispatch, state, reducer)
+	const theThunk = thunk(dispatch, state, reducer, clientKey)
 	
 	// initial load
 	useEffect(() => {

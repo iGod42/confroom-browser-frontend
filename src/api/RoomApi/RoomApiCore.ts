@@ -9,18 +9,18 @@ type ApiEventType = {
 	isAllDay: boolean
 }
 
-export function getRooms(): Promise<RoomType[]> {
-	return fetch(new URL("rooms", config.hubUrl).toString())
+export function getRooms(clientKey: string): Promise<RoomType[]> {
+	return fetch(new URL(`rooms?${clientKey}`, config.hubUrl).toString())
 		.then(res => res.json())
 }
 
-export function getRoom(roomId: string): Promise<RoomType> {
-	return fetch(new URL("rooms/" + roomId, config.hubUrl).toString())
+export function getRoom(roomId: string, clientKey: string): Promise<RoomType> {
+	return fetch(new URL(`rooms/${roomId}?${clientKey}`, config.hubUrl).toString())
 		.then(res => res.json())
 }
 
-export function getEvents(roomId: string, from: Date, to: Date): Promise<EventType[]> {
-	const url = new URL(`rooms/${roomId}/events`, config.hubUrl)
+export function getEvents(roomId: string, from: Date, to: Date, clientKey: string): Promise<EventType[]> {
+	const url = new URL(`rooms/${roomId}/events?${clientKey}`, config.hubUrl)
 	url.searchParams.append("from", from.toISOString())
 	url.searchParams.append("to", to.toISOString())
 	
@@ -29,8 +29,8 @@ export function getEvents(roomId: string, from: Date, to: Date): Promise<EventTy
 		.then(res => (res as ApiEventType[]).map(convertEvent))
 }
 
-export async function bookRoom(roomId: string, from: Date, to: Date): Promise<EventType> {
-	const url = new URL(`rooms/${roomId}/events`, config.hubUrl)
+export async function bookRoom(roomId: string, from: Date, to: Date, clientKey: string): Promise<EventType> {
+	const url = new URL(`rooms/${roomId}/events?${clientKey}`, config.hubUrl)
 	url.searchParams.append("from", from.toISOString())
 	url.searchParams.append("to", to.toISOString())
 	
@@ -41,8 +41,8 @@ export async function bookRoom(roomId: string, from: Date, to: Date): Promise<Ev
 		.then(convertEvent)
 }
 
-export async function updateBooking(roomId: string, event: EventType) {
-	const url = new URL(`rooms/${roomId}/events/${event.id}`, config.hubUrl)
+export async function updateBooking(roomId: string, event: EventType, clientKey: string) {
+	const url = new URL(`rooms/${roomId}/events/${event.id}?${clientKey}`, config.hubUrl)
 	
 	return fetch(url.toString(), {
 		method: "PATCH",

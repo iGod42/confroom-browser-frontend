@@ -1,9 +1,7 @@
 import React from "react"
 import {useParams} from "react-router-dom"
 
-
 import StatusPane from "./components/StatusPane"
-
 import ActionButton from "./components/ActionButton"
 import StatusWrapper from "./components/StatusWrapper"
 import * as EventTools from "./tools/EventTools"

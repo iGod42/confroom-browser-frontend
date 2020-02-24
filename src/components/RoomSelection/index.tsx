@@ -1,18 +1,21 @@
 import React, {useEffect, useState} from "react"
-import {useHistory} from "react-router-dom"
+import {useHistory, useLocation} from "react-router-dom"
 import Box from "@material-ui/core/Box"
 import Typography from "@material-ui/core/Typography"
 import {RoomType, getRooms} from "../../api/RoomApi"
 import Rooms from "./components/Rooms"
+import useClientKey from "../useClientKey"
 
 const RoomSelection = () => {
 	const [loading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string>()
 	const [rooms, setRooms] = useState<Array<RoomType>>([])
 	const history = useHistory()
+	const location = useLocation()
+	const clientKey = useClientKey()
 	
 	function selectRoom(roomId: string) {
-		history.push(`/status/${roomId}`)
+		history.push(`/status/${roomId}${location.search}`)
 	}
 	
 	useEffect(() => {
@@ -22,7 +25,7 @@ const RoomSelection = () => {
 			setLoading(true)
 			setError(undefined)
 			try {
-				setRooms(await getRooms())
+				setRooms(await getRooms(clientKey))
 			} catch (e) {
 				setRooms([])
 				setError("Could not reach hub, will retry automatically")
