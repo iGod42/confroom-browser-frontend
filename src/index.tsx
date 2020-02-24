@@ -11,7 +11,7 @@ import App from "./components/App"
 
 ReactDOM.render(<ThemeProvider theme={theme(config.darkMode)}>
 	<CssBaseline/>
-	<App socketUrl={config.hubUrl}/>
+	<App socketUrl={new URL(config.hubUrl).origin}/>
 </ThemeProvider>, document.getElementById("root"))
 
 // If you want your app to work offline and load faster, you can change
