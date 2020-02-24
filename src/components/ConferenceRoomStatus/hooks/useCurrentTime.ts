@@ -9,6 +9,7 @@ export default function () {
 			const theTime = new Date()
 			setCurrentTime(theTime)
 			theInterval = setTimeout(updateDate, 60000 - theTime.getSeconds() * 1000)
+			//theInterval = setTimeout(updateDate, 3000)
 		}
 		updateDate()
 		return () => clearInterval(theInterval)
