@@ -10,17 +10,17 @@ type ApiEventType = {
 }
 
 export function getRooms(clientKey: string): Promise<RoomType[]> {
-	return fetch(new URL(`rooms?${clientKey}`, config.hubUrl).toString())
+	return fetch(new URL(`./rooms?${clientKey}`, config.hubUrl).toString())
 		.then(res => res.json())
 }
 
 export function getRoom(roomId: string, clientKey: string): Promise<RoomType> {
-	return fetch(new URL(`rooms/${roomId}?${clientKey}`, config.hubUrl).toString())
+	return fetch(new URL(`./rooms/${roomId}?${clientKey}`, config.hubUrl).toString())
 		.then(res => res.json())
 }
 
 export function getEvents(roomId: string, from: Date, to: Date, clientKey: string): Promise<EventType[]> {
-	const url = new URL(`rooms/${roomId}/events?${clientKey}`, config.hubUrl)
+	const url = new URL(`./rooms/${roomId}/events?${clientKey}`, config.hubUrl)
 	url.searchParams.append("from", from.toISOString())
 	url.searchParams.append("to", to.toISOString())
 	
@@ -30,7 +30,7 @@ export function getEvents(roomId: string, from: Date, to: Date, clientKey: strin
 }
 
 export async function bookRoom(roomId: string, from: Date, to: Date, clientKey: string): Promise<EventType> {
-	const url = new URL(`rooms/${roomId}/events?${clientKey}`, config.hubUrl)
+	const url = new URL(`./rooms/${roomId}/events?${clientKey}`, config.hubUrl)
 	url.searchParams.append("from", from.toISOString())
 	url.searchParams.append("to", to.toISOString())
 	
@@ -42,7 +42,7 @@ export async function bookRoom(roomId: string, from: Date, to: Date, clientKey: 
 }
 
 export async function updateBooking(roomId: string, event: EventType, clientKey: string) {
-	const url = new URL(`rooms/${roomId}/events/${event.id}?${clientKey}`, config.hubUrl)
+	const url = new URL(`./rooms/${roomId}/events/${event.id}?${clientKey}`, config.hubUrl)
 	
 	return fetch(url.toString(), {
 		method: "PATCH",
