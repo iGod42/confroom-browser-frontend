@@ -39,7 +39,7 @@ const RoomSelection = () => {
 			.then(() => {
 			})
 		return () => clearTimeout(theTimeout)
-	}, [])
+	}, [clientKey])
 	
 	return loading ? <Box m={3}><Typography variant="overline">loading...</Typography></Box> :
 		error ? <Box m={3}><Typography color="error" variant="subtitle2">{error}</Typography></Box> :
