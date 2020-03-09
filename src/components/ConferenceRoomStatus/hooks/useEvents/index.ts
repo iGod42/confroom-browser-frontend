@@ -3,10 +3,10 @@ import reducer, {init} from "./reducer"
 import thunk from "./thunk"
 import {clearError, loadTodaysEvents, receiveUpdates, setError} from "./actions"
 import io from "socket.io-client"
-import {EventUpdate} from "../../../../../../hub/src/lib/CalendarApi"
 import EventsState from "./interface/EventsState"
 import {EventsAction} from "./interface/EventActionType"
 import useClientKey from "../../../useClientKey"
+import { EventUpdate } from "../../../../api/RoomApi"
 
 export default (roomId: string | undefined, currentTime: Date, socketUrl: string): [EventsState, Dispatch<EventsAction>] => {
 	if (!roomId) throw new Error("Room ID is not set")

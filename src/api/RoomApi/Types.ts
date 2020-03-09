@@ -10,3 +10,9 @@ export type EventType = {
 	end: Date,
 	isAllDay: boolean
 }
+
+export type EventUpdate = {
+	type: "addedOrUpdated" | "removed",
+	id: string,
+	event?: EventType
+}

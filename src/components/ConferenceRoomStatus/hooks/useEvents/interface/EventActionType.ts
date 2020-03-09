@@ -1,5 +1,4 @@
-import {EventType} from "../../../../../api/RoomApi"
-import {EventUpdate} from "../../../../../../../hub/src/lib/CalendarApi/interface"
+import {EventType, EventUpdate} from "../../../../../api/RoomApi"
 
 enum EventsActionType {
 	StartLoad = "StartLoad",
